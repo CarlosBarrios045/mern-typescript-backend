@@ -1,5 +1,7 @@
 import mongoose, { ConnectionOptions } from 'mongoose';
-import config from './index';
+import { config } from 'dotenv';
+
+config();
 
 (async () => {
   try {
@@ -7,14 +9,8 @@ import config from './index';
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
-      authSource: 'admin',
-      user: config.MONGO_USER,
-      pass: config.MONGO_PASSWORD,
     };
-    await mongoose.connect(
-      `mongodb://${config.MONGO_HOST}/${config.MONGO_DATABASE}`,
-      options
-    );
+    await mongoose.connect(process.env.MONGO_URI || '', options);
     console.log('DB is connected');
   } catch (e) {
     console.log('Error DB ->', e);
